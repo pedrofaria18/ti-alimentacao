@@ -82,6 +82,4 @@ public class ProductsController {
         productsRepository.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).body("Product deleted");
     }
-
-
 }

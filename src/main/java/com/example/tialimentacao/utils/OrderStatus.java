@@ -2,9 +2,7 @@ package com.example.tialimentacao.utils;
 
 public enum OrderStatus {
     ORDER_RECEIVED("Pedido recebido"),
-    PROCESSING_PAYMENT("Processando pagamento"),
-    PAYMENT_ACCEPTED("Pagamento aceito"),
-    PAYMENT_DENIED("Pagamento negado"),
+    AWAITING_PAYMENT("Aguardando pagamento"),
     ORDER_PREPARING("Pedido em preparo"),
     ORDER_IN_ROUTE("Pedido em rota"),
     ORDER_DELIVERED("Pedido entregue"),

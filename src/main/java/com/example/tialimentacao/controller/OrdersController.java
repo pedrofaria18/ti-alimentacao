@@ -1,5 +1,6 @@
 package com.example.tialimentacao.controller;
 
+import com.example.tialimentacao.api.Accounting;
 import com.example.tialimentacao.dto.order.OrderRequestDTO;
 import com.example.tialimentacao.dto.order.OrderResponseDTO;
 import com.example.tialimentacao.dto.order.ProductOrderResponseDTO;
@@ -27,6 +28,8 @@ public class OrdersController {
     final OrdersRepository ordersRepository;
     final ProductsOrdersRepository productsOrdersRepository;
     final ProductsRepository productsRepository;
+
+    Accounting accounting = new Accounting();
 
     public OrdersController(OrdersRepository ordersRepository, ProductsOrdersRepository productsOrdersRepository, ProductsRepository productsRepository) {
         this.ordersRepository = ordersRepository;
@@ -112,42 +115,10 @@ public class OrdersController {
             productsOrdersRepository.save(new ProductOrder(product.quantity(), productSaved, orderCreated));
         });
 
-        return ResponseEntity.ok(order);
-    }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable("id") UUID id, @RequestBody @Valid OrderRequestDTO order) {
-        Optional<Order> orderOptional = ordersRepository.findById(id);
+        accounting.sendOrder(orderCreated);
 
-        if(!orderOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found");
-        }
-
-        Order orderUpdated = orderOptional.get();
-
-        orderUpdated.setCompany(order.company());
-        orderUpdated.setPaymentMethod(order.paymentMethod());
-        orderUpdated.setTotal(order.total());
-
-        ordersRepository.save(orderUpdated);
-
-        List<ProductOrder> productsOrders = productsOrdersRepository.findAllByOrderId(orderUpdated.getId());
-
-        productsOrders.forEach(productOrder -> {
-            productsOrdersRepository.delete(productOrder);
-        });
-
-
-        order.products().forEach(product -> {
-            Product productSaved = productsRepository.findByName(product.name());
-
-            productSaved.setQuantity(
-                    productSaved.getQuantity() - product.quantity()
-            );
-            productsRepository.save(productSaved);
-            productsOrdersRepository.save(new ProductOrder(product.quantity(), productSaved, orderUpdated));
-        });
-
+        orderCreated.setStatus(OrderStatus.AWAITING_PAYMENT);
 
         return ResponseEntity.ok(order);
     }
@@ -198,5 +169,37 @@ public class OrdersController {
         return ResponseEntity.ok("Status updated successfully");
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> paymentVoucher(@PathVariable("id") UUID id, @RequestBody @Valid String voucher) {
+        Optional<Order> orderOptional = ordersRepository.findById(id);
 
+        if(!orderOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found");
+        }
+
+
+        Order order = orderOptional.get();
+        if(voucher.equals("")) {
+            order.setStatus(OrderStatus.ORDER_CANCELED);
+            return ResponseEntity.ok("Voucher is not valid, order canceled");
+        } else {
+            order.setStatus(OrderStatus.ORDER_PREPARING);
+            return ResponseEntity.ok("Voucher is valid, payment accepted");
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> cancelOrder(@PathVariable("id") UUID id) {
+        Optional<Order> orderOptional = ordersRepository.findById(id);
+
+        if(!orderOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found");
+        }
+
+        Order order = orderOptional.get();
+
+        order.setStatus(OrderStatus.ORDER_CANCELED);
+
+        return ResponseEntity.ok("Order canceled successfully");
+    }
 }
