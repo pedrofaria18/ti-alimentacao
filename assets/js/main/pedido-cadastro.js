@@ -14,7 +14,7 @@ function _startPedidoCadastro(){
     });
 
     const submitButton = document.getElementById("submit");
-    deleteButton.addEventListener("click", function() {
+    submitButton.addEventListener("click", function() {
         _submitPedido();
     });
 }
