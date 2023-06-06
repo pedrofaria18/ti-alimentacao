@@ -393,7 +393,6 @@
 })();
 
 async function _start() {
-  console.log("Hello")
   const pathname = (window.location.pathname).replace('/ti-alimentacao', '');
   switch (pathname) {
     case "/index.html":
