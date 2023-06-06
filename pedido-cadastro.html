@@ -62,7 +62,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-           ...
+            ...
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -192,28 +192,30 @@
             </div>
 
             <div id="productQuantity">
-              <div class="row mb-3">
-                <label class="col-sm-2 col-form-label">Produto</label>
-                <div class="col-sm-10">
-                  <select id="select0" class="form-select" multiple aria-label="multiple select example">
-                    <option selected>Selecione</option>
-                    <option value="1">Produto 1</option>
-                    <option value="2">Produto 2</option>
-                    <option value="3">Produto 3</option>
-                  </select>
+              <div id="pq0">
+                <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">Produto</label>
+                  <div class="col-sm-10">
+                    <select id="select0" class="form-select" multiple aria-label="multiple select example">
+                      <option selected>Selecione</option>
+                      <option value="1">Produto 1</option>
+                      <option value="2">Produto 2</option>
+                      <option value="3">Produto 3</option>
+                    </select>
+                  </div>
                 </div>
-              </div>
-              <div class="row mb-3">
-                <label for="quantity0" class="col-sm-2 col-form-label">Quantidade</label>
-                <div class="col-sm-10">
-                  <input type="number" class="form-control">
+                <div class="row mb-3">
+                  <label for="quantity0" class="col-sm-2 col-form-label">Quantidade</label>
+                  <div class="col-sm-10">
+                    <input type="number" class="form-control">
+                  </div>
                 </div>
               </div>
             </div>
 
             <div class="buttons text-end">
-              <button type="button" class="btn btn-warning"><i class="bi bi-trash"></i></button>
-              <button type="button" class="btn btn-success"><i class="bi bi-plus"></i></button>
+              <button id="delete" type="button" class="btn btn-warning"><i class="bi bi-trash"></i></button>
+              <button id="add" type="button" class="btn btn-success"><i class="bi bi-plus"></i></button>
             </div>
 
             <div class="row mb-3">
@@ -223,26 +225,24 @@
                 <input type="text" class="form-control" value="R$ 0,00" disabled>
               </div>
             </div>
-          
-            </div>
-
-
-
-            <div class="row mb-3">
-              <label class="col-sm-2 col-form-label"></label>
-              <div class="col-sm-10">
-                <button type="submit" class="btn btn-primary">Enviar</button>
-              </div>
-            </div>
-
-          </form><!-- End General Form Elements -->
 
         </div>
-      </div>
 
-    </main><!-- End #main -->
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-        class="bi bi-arrow-up-short"></i></a>
+        <div class="row mb-3">
+          <label class="col-sm-2 col-form-label"></label>
+          <div class="col-sm-10">
+            <button type="submit" class="btn btn-primary">Enviar</button>
+          </div>
+        </div>
+
+        </form><!-- End General Form Elements -->
+
+      </div>
+  </div>
+
+  </main><!-- End #main -->
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
   </div>
 
   <!-- ======= Footer ======= -->
