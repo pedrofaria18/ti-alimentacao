@@ -1248,3 +1248,7 @@ h6 {
 #hamburger-load {
   height: 100px;
 }
+
+.buttons {
+  margin-bottom: 15px;
+}
