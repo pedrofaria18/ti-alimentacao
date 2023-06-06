@@ -13,6 +13,10 @@ function _startPedidoCadastro(){
         _deleteProdutoQuantidadeItem();
     });
 
+    const submitButton = document.getElementById("submit");
+    deleteButton.addEventListener("click", function() {
+        _submitPedido();
+    });
 }
 
 function _addProdutoQuantidadeItem(){
@@ -22,7 +26,7 @@ function _addProdutoQuantidadeItem(){
         <div class="row mb-3">
             <label class="col-sm-2 col-form-label">Produto</label>
             <div class="col-sm-10">
-                <select id="select${PQ_INDEX}" class="form-select">
+                <select id="select${PQ_INDEX}" class="form-select" onchange="_updateTotal()">
                     <option selected="">Selecione</option>
                     <option value="1">Produto 1</option>
                     <option value="2">Produto 2</option>
@@ -33,7 +37,7 @@ function _addProdutoQuantidadeItem(){
         <div class="row mb-3">
             <label class="col-sm-2 col-form-label">Quantidade</label>
             <div class="col-sm-10">
-                <input id="quantity${PQ_INDEX}" type="number" class="form-control">
+                <input id="quantity${PQ_INDEX}" type="number" class="form-control" onchange="_updateTotal()">
             </div>
         </div>
   </div>`;
@@ -53,6 +57,6 @@ function _updateTotal(){
 
 }
 
-function _submit(){
+function _submitPedido(){
 
 }
