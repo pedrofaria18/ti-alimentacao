@@ -191,27 +191,7 @@
               </div>
             </div>
 
-            <div id="productQuantity">
-              <div id="pq0">
-                <div class="row mb-3">
-                  <label class="col-sm-2 col-form-label">Produto</label>
-                  <div class="col-sm-10">
-                    <select id="select0" class="form-select" multiple aria-label="multiple select example">
-                      <option selected>Selecione</option>
-                      <option value="1">Produto 1</option>
-                      <option value="2">Produto 2</option>
-                      <option value="3">Produto 3</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="quantity0" class="col-sm-2 col-form-label">Quantidade</label>
-                  <div class="col-sm-10">
-                    <input type="number" class="form-control">
-                  </div>
-                </div>
-              </div>
-            </div>
+            <div id="productQuantity"></div>
 
             <div class="buttons text-end">
               <button id="delete" type="button" class="btn btn-warning"><i class="bi bi-trash"></i></button>
@@ -226,14 +206,13 @@
               </div>
             </div>
 
+            <div class="text-end">
+              <button id="confirm" type="submit" class="btn btn-primary text-end">Enviar</button>
+            </div>
+
         </div>
 
-        <div class="row mb-3">
-          <label class="col-sm-2 col-form-label"></label>
-          <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary">Enviar</button>
-          </div>
-        </div>
+
 
         </form><!-- End General Form Elements -->
 
@@ -252,7 +231,7 @@
       &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
     </div>
     <div class="credits">
-      Desenvolvido par a Disciplina de Trabalho Interdisciplinar: Sistemas Integrados de Gestão Empresarial (PUC Minas)
+      Desenvolvido para Disciplina de Trabalho Interdisciplinar: Sistemas Integrados de Gestão Empresarial (PUC Minas)<br>
       Designed by <a href="https://bootstrapmade.com/" target="_blank">BootstrapMade</a>
     </div>
   </footer><!-- End Footer -->
@@ -270,10 +249,13 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
 
-  <!-- Template Main JS File -->
+  <!-- Main JS File -->
   <script src="assets/js/support/loading.js"></script>
   <script src="assets/js/support/logger.js"></script>
   <script src="assets/js/support/date.js"></script>
+  <script src="assets/js/main/index.js"></script>
+  <script src="assets/js/main/pedido-cadastro.js"></script>
+  <script src="assets/js/main/produto-cadastro.js"></script>
   <script src="assets/js/main/main.js"></script>
 
 </body>

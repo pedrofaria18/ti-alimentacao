@@ -393,4 +393,19 @@
 })();
 
 async function _start() {
+  console.log("Hello")
+  const pathname = (window.location.pathname).replace('/ti-alimentacao', '');
+  switch (pathname) {
+    case "/index.html":
+    case "/":
+      _startIndex()
+      break;
+    case "/pedido-cadastro.html":
+      _startPedidoCadastro('meuRH');
+      break;
+    case "/produto-cadastro.html":
+      _startProdutoCadastro();
+      break;
+  }
+
 }
