@@ -401,7 +401,7 @@ async function _start() {
       _startIndex()
       break;
     case "/pedido-cadastro.html":
-      _startPedidoCadastro('meuRH');
+      _startPedidoCadastro();
       break;
     case "/produto-cadastro.html":
       _startProdutoCadastro();
