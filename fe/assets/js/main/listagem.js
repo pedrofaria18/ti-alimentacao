@@ -32,7 +32,7 @@ function _getProdutoTBody(responseData) {
               <th scope="row">${i + 1}</th>
               <td>${responseData[i].name}</td>
               <td>${responseData[i].quantity}</td>
-              <td>${_intToMoney(responseData[i].price)}</td>
+              <td>${_valueToMoney(responseData[i].price)}</td>
             </tr>`
   }
   return tBody;
@@ -76,7 +76,7 @@ function _getPedidoTBody(responseData) {
               <td>${_getStatus(responseData[i].status)}</td>
               <td>${responseData[i].paymentMethod}</td>
               <td>${_getProdutosInPedidos(responseData[i].products)}</td>
-              <td>${_intToMoney(responseData[i].total)}</td>
+              <td>${_valueToMoney(responseData[i].total)}</td>
             </tr>`
   }
   return tBody;

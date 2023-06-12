@@ -1,4 +1,4 @@
-var PQ_INDEX = 0;
+var PRODUTO_SELECT_INDEX = 0;
 
 function _startPedidoCadastro(){
     _addProdutoQuantidadeItem();
@@ -22,11 +22,11 @@ function _startPedidoCadastro(){
 function _addProdutoQuantidadeItem(){
     const div = document.getElementById("productQuantity");
     div.innerHTML += `
-    <div id="pq${PQ_INDEX}">
+    <div id="pq${PRODUTO_SELECT_INDEX}">
         <div class="row mb-3">
             <label class="col-sm-2 col-form-label">Produto</label>
             <div class="col-sm-10">
-                <select id="select${PQ_INDEX}" class="form-select" onchange="_updateTotal()">
+                <select id="select${PRODUTO_SELECT_INDEX}" class="form-select" onchange="_updateTotal()">
                     <option selected="">Selecione</option>
                     <option value="1">Produto 1</option>
                     <option value="2">Produto 2</option>
@@ -37,18 +37,18 @@ function _addProdutoQuantidadeItem(){
         <div class="row mb-3">
             <label class="col-sm-2 col-form-label">Quantidade</label>
             <div class="col-sm-10">
-                <input id="quantity${PQ_INDEX}" type="number" class="form-control" onchange="_updateTotal()">
+                <input id="quantity${PRODUTO_SELECT_INDEX}" type="number" class="form-control" onchange="_updateTotal()">
             </div>
         </div>
   </div>`;
-  PQ_INDEX++;
+  PRODUTO_SELECT_INDEX++;
 }
 
 function _deleteProdutoQuantidadeItem(){
-    if (PQ_INDEX > 1){
-        PQ_INDEX--
+    if (PRODUTO_SELECT_INDEX > 1){
+        PRODUTO_SELECT_INDEX--
         const parent = document.getElementById("productQuantity");
-        const element = document.getElementById(`pq${PQ_INDEX}`);
+        const element = document.getElementById(`pq${PRODUTO_SELECT_INDEX}`);
         parent.removeChild(element);
     }
 }

@@ -12,10 +12,10 @@ async function _post(url, data) {
             const responseData = await response.json();
             return responseData
         } else {
-            console.error('Request failed. Status:', response.status);
+            console.error(response.status);
         }
     } catch (error) {
-        console.error('Request failed:', error);
+        console.error(error);
     }
 }
 
@@ -26,13 +26,13 @@ async function _get(url) {
             const responseData = await response.json();
             return responseData
         } else {
-            console.error('Request failed. Status:', response.status);
+            console.error(response.status);
         }
     } catch (error) {
-        console.error('Request failed:', error);
+        console.error(error);
     }
 }
 
-function _intToMoney(value) {
+function _valueToMoney(value) {
     return value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
 }
