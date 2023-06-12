@@ -1,7 +1,6 @@
 package com.example.tialimentacao.utils;
 
 public enum OrderStatus {
-    ORDER_RECEIVED("Pedido recebido"),
     AWAITING_PAYMENT("Aguardando pagamento"),
     ORDER_PREPARING("Pedido em preparo"),
     ORDER_IN_ROUTE("Pedido em rota"),

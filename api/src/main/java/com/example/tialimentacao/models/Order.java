@@ -26,7 +26,7 @@ public class Order {
     private String paymentMethod;
 
     @Column(nullable = false)
-    private OrderStatus status = OrderStatus.ORDER_RECEIVED;
+    private OrderStatus status = OrderStatus.AWAITING_PAYMENT;
 
     @Column(nullable = false)
     private Double total;

@@ -16,10 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -56,6 +53,7 @@ public class OrdersController {
             });
 
             ordersResponse.add(new OrderResponseDTO(
+                    order.getId(),
                     order.getCompany(),
                     order.getPaymentMethod(),
                     order.getTotal(),
@@ -89,6 +87,7 @@ public class OrdersController {
         });
 
         return ResponseEntity.ok(new OrderResponseDTO(
+                order.getId(),
                 order.getCompany(),
                 order.getPaymentMethod(),
                 order.getTotal(),
@@ -98,29 +97,57 @@ public class OrdersController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderRequestDTO> create(@RequestBody @Valid OrderRequestDTO order) {
+    public ResponseEntity<Object> create(@RequestBody @Valid OrderRequestDTO order) {
+
+        if(order.products() == null || order.products().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Products is required");
+        }
+
+        Double total = 0.0;
+
+        for(ProductOrderResponseDTO product : order.products()) {
+            Product productSaved = productsRepository.findByName(product.name());
+
+            if(productSaved == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
+            }
+
+            if(product.quantity() > productSaved.getQuantity()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Product quantity is invalid");
+            }
+
+            total += productSaved.getPrice() * product.quantity();
+        }
+
+        if(!total.equals(order.total())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Total is invalid");
+        }
+
         Order orderCreated = ordersRepository.save(new Order(
                 order.company(),
                 order.paymentMethod(),
                 order.total()
         ));
 
-        order.products().forEach(product -> {
+        for(ProductOrderResponseDTO product : order.products()) {
             Product productSaved = productsRepository.findByName(product.name());
+
+            productsOrdersRepository.save(new ProductOrder(
+                    product.quantity(),
+                    productSaved,
+                    orderCreated
+            ));
 
             productSaved.setQuantity(
                     productSaved.getQuantity() - product.quantity()
             );
+
             productsRepository.save(productSaved);
-            productsOrdersRepository.save(new ProductOrder(product.quantity(), productSaved, orderCreated));
-        });
+        }
 
+        //accounting.sendOrder(orderCreated);
 
-        accounting.sendOrder(orderCreated);
-
-        orderCreated.setStatus(OrderStatus.AWAITING_PAYMENT);
-
-        return ResponseEntity.ok(order);
+        return ResponseEntity.ok(orderCreated);
     }
 
     @DeleteMapping("/{id}")
@@ -150,7 +177,7 @@ public class OrdersController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/updateStatus/{id}")
     public ResponseEntity<Object> updateStatus(@PathVariable("id") UUID id, @RequestBody @Valid OrderStatus status) {
         Optional<Order> orderOptional = ordersRepository.findById(id);
 
@@ -158,48 +185,69 @@ public class OrdersController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found");
         }
 
-        if (!OrderStatus.isValid(status)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Status is invalid");
-        }
-
         Order order = orderOptional.get();
 
+        if (order.getStatus().equals(OrderStatus.ORDER_CANCELED)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Order is canceled");
+        }
+
+        if (order.getStatus().equals(OrderStatus.ORDER_SUCCESS)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Order is already completed");
+        }
+
+        if (order.getStatus().equals(OrderStatus.AWAITING_PAYMENT)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Do not update the status of an order that is awaiting payment");
+        }
+
+
+        if (order.getStatus().equals(status)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Status is the same as the current one");
+        }
+
+        EnumSet<OrderStatus> orderStatus = EnumSet.of(
+                OrderStatus.ORDER_IN_ROUTE,
+                OrderStatus.ORDER_DELIVERED,
+                OrderStatus.ORDER_SUCCESS,
+                OrderStatus.ORDER_CANCELED
+        );
+
+        if(!orderStatus.contains(status)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Status is invalid or not allowed");
+        }
+
         order.setStatus(status);
+        ordersRepository.save(order);
 
         return ResponseEntity.ok("Status updated successfully");
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Object> paymentVoucher(@PathVariable("id") UUID id, @RequestBody @Valid String voucher) {
+    @PostMapping("/receiptPayment/{id}")
+    public ResponseEntity<Object> receiptPayment(@PathVariable("id") UUID id, @RequestBody @Valid String voucher) {
         Optional<Order> orderOptional = ordersRepository.findById(id);
 
         if(!orderOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found");
         }
 
-
         Order order = orderOptional.get();
-        if(voucher.equals("")) {
+
+        if (!order.getStatus().equals(OrderStatus.AWAITING_PAYMENT)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Order is not awaiting payment status");
+        }
+
+
+        if (voucher == null || voucher.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Voucher is required");
+        }
+
+        if (voucher.length() < 44) {
             order.setStatus(OrderStatus.ORDER_CANCELED);
-            return ResponseEntity.ok("Voucher is not valid, order canceled");
-        } else {
-            order.setStatus(OrderStatus.ORDER_PREPARING);
-            return ResponseEntity.ok("Voucher is valid, payment accepted");
-        }
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Object> cancelOrder(@PathVariable("id") UUID id) {
-        Optional<Order> orderOptional = ordersRepository.findById(id);
-
-        if(!orderOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found");
+            ordersRepository.save(order);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Voucher is invalid, order canceled");
         }
 
-        Order order = orderOptional.get();
-
-        order.setStatus(OrderStatus.ORDER_CANCELED);
-
-        return ResponseEntity.ok("Order canceled successfully");
+        order.setStatus(OrderStatus.ORDER_IN_ROUTE);
+        ordersRepository.save(order);
+        return ResponseEntity.ok("Payment receipt successfully");
     }
 }
