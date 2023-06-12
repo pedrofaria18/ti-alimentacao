@@ -6,6 +6,8 @@
  * License: https://bootstrapmade.com/license/
  */
 
+const HOST = 'http://localhost:8080';
+
 (function () {
   "use strict";
 
@@ -393,7 +395,7 @@
 })();
 
 async function _start() {
-  const pathname = (window.location.pathname).replace('/ti-alimentacao', '');
+  const pathname = (window.location.pathname).replace('/ti-alimentacao', '').replace('/fe', '');
   switch (pathname) {
     case "/index.html":
     case "/":
@@ -404,6 +406,12 @@ async function _start() {
       break;
     case "/produto-cadastro.html":
       _startProdutoCadastro();
+      break;
+    case "/produto-listagem.html":
+      _startProdutoListagem();
+      break;
+    case "/pedido-listagem.html":
+      _startPedidoListagem();
       break;
   }
 

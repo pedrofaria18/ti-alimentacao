@@ -107,14 +107,14 @@
           <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
             <i class="bi bi-egg-fried"></i><span>Produto</span><i class="bi bi-chevron-down ms-auto"></i>
           </a>
-          <ul id="components-nav" class="nav-content " data-bs-parent="#sidebar-nav">
+          <ul id="components-nav" class="nav-content" data-bs-parent="#sidebar-nav">
             <li id="produto-listagem">
-              <a href="produto-listagem.html">
+              <a href="produto-listagem.html" class="active">
                 <i class="bi bi-circle"></i><span>Listagem</span>
               </a>
             </li>
             <li id="produto-cadastro">
-              <a href="produto-cadastro.html" class="active">
+              <a href="produto-cadastro.html">
                 <i class="bi bi-circle"></i><span>Cadastro</span>
               </a>
             </li>
@@ -125,7 +125,7 @@
           <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
             <i class="bi bi-card-checklist"></i><span>Pedido</span><i class="bi bi-chevron-down ms-auto"></i>
           </a>
-          <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <ul id="forms-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
             <li id="pedido-listagem">
               <a href="pedido-listagem.html">
                 <i class="bi bi-circle"></i><span>Listagem</span>
@@ -154,55 +154,24 @@
     <main id="main" class="main">
 
       <div class="pagetitle">
-        <h1>Cadastrar Produto</h1>
+        <h1>Listagem de Produtos</h1>
         <nav>
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="index.html">Home</a></li>
             <li class="breadcrumb-item">Produto</li>
-            <li class="breadcrumb-item active">Cadastro</li>
+            <li class="breadcrumb-item active">Listagem</li>
           </ol>
         </nav>
       </div><!-- End Page Title -->
 
-      <div class="card">
+      <div class="card" id="table">
         <div class="card-body">
-          <h5 class="card-title">Dados do Produto</h5>
-
-          <!-- General Form Elements -->
-          <form>
-            <div class="row mb-3">
-              <label class="col-sm-2 col-form-label">Nome</label>
-              <div class="col-sm-10">
-                <input id="inputName" type="text" class="form-control">
-              </div>
-            </div>
-            <div class="row mb-3">
-              <label class="col-sm-2 col-form-label">Valor Unitário</label>
-              <div class="col-sm-10">
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">R$</span>
-                  </div>
-                  <input id="inputNumber" type="number" class="form-control" step="0.01" min="0" max="999999" data-type="currency"
-                    data-locales="pt-BR" id="inputNumber" placeholder="0,00">
-                </div>
-              </div>
-            </div>
-            <div class="row mb-3">
-              <label class="col-sm-2 col-form-label">Quantidade</label>
-              <div class="col-sm-10">
-                <input id="inputQuantity" type="number" class="form-control" step="1">
-              </div>
-            </div>
-
-            <div class="row mb-3">
-              <label class="col-sm-2 col-form-label"></label>
-              <div class="col-sm-10">
-                <button id="submit" class="btn btn-primary">Enviar</button>
-              </div>
-            </div>
-
-          </form><!-- End General Form Elements -->
+          <h5 class="card-title"></h5>
+          <div id="noProducts" class="alert alert-info alert-dismissible fade show" role="alert">
+            <i class="bi bi-info-circle me-1"></i>
+            Poxa! Não há produtos cadastrados 😢
+          </div>
+          <div id="table-container"></div>
 
         </div>
       </div>
@@ -219,7 +188,8 @@
       &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
     </div>
     <div class="credits">
-      Desenvolvido para Disciplina de Trabalho Interdisciplinar: Sistemas Integrados de Gestão Empresarial (PUC Minas)<br>
+      Desenvolvido para Disciplina de Trabalho Interdisciplinar: Sistemas Integrados de Gestão Empresarial (PUC
+      Minas)<br>
       Designed by <a href="https://bootstrapmade.com/" target="_blank">BootstrapMade</a>
     </div>
   </footer><!-- End Footer -->
@@ -243,8 +213,7 @@
   <script src="assets/js/support/date.js"></script>
   <script src="assets/js/support/data.js"></script>
   <script src="assets/js/main/index.js"></script>
-  <script src="assets/js/main/pedido-cadastro.js"></script>
-  <script src="assets/js/main/produto-cadastro.js"></script>
+  <script src="assets/js/main/listagem.js"></script>
   <script src="assets/js/main/main.js"></script>
 
 </body>

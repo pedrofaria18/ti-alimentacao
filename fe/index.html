@@ -83,36 +83,6 @@
         <i class="bi bi-list toggle-sidebar-btn"></i>
       </div><!-- End Logo -->
 
-      <nav class="header-nav ms-auto">
-        <ul class="d-flex align-items-center">
-
-          <li class="nav-item dropdown pe-3" id="login">
-
-            <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-              <img src="assets/img/user-mini.jpg" alt="Profile" class="rounded-circle">
-              <span class="d-none d-md-block dropdown-toggle ps-2" id="name"></span>
-            </a><!-- End Profile Iamge Icon -->
-
-            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-              <li class="dropdown-header">
-                <h6 id="fullName"></h6>
-                <div id="job"></div>
-                <span>Usuário</span>
-              </li>
-              <li>
-                <a class="dropdown-item d-flex align-items-center" href="#" data-bs-toggle="modal"
-                  data-bs-target="#verticalycentered">
-                  <i class="bi bi-box-arrow-right"></i>
-                  <span>Sair</span>
-                </a>
-              </li>
-
-            </ul><!-- End Profile Dropdown Items -->
-          </li><!-- End Profile Nav -->
-
-        </ul>
-      </nav><!-- End Icons Navigation -->
-
     </header><!-- End Header -->
 
     <!-- ======= Sidebar ======= -->
@@ -132,7 +102,12 @@
             <i class="bi bi-egg-fried"></i><span>Produto</span><i class="bi bi-chevron-down ms-auto"></i>
           </a>
           <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-            <li id="produto-visualizar">
+            <li id="produto-listagem">
+              <a href="produto-listagem.html">
+                <i class="bi bi-circle"></i><span>Listagem</span>
+              </a>
+            </li>
+            <li id="produto-cadastro">
               <a href="produto-cadastro.html">
                 <i class="bi bi-circle"></i><span>Cadastro</span>
               </a>
@@ -145,7 +120,12 @@
             <i class="bi bi-card-checklist"></i><span>Pedido</span><i class="bi bi-chevron-down ms-auto"></i>
           </a>
           <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-            <li id="pedido-visualizar">
+            <li id="pedido-listagem">
+              <a href="pedido-listagem.html">
+                <i class="bi bi-circle"></i><span>Listagem</span>
+              </a>
+            </li>
+            <li id="pedido-cadastro">
               <a href="pedido-cadastro.html">
                 <i class="bi bi-circle"></i><span>Cadastro</span>
               </a>
@@ -208,9 +188,8 @@
   <script src="assets/js/support/loading.js"></script>
   <script src="assets/js/support/logger.js"></script>
   <script src="assets/js/support/date.js"></script>
+  <script src="assets/js/support/data.js"></script>
   <script src="assets/js/main/index.js"></script>
-  <script src="assets/js/main/pedido-cadastro.js"></script>
-  <script src="assets/js/main/produto-cadastro.js"></script>
   <script src="assets/js/main/main.js"></script>
 
 </body>
