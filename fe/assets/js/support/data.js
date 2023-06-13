@@ -1,3 +1,5 @@
+const HOST = 'http://localhost:8080';
+
 async function _post(url, data) {
     try {
         const response = await fetch(HOST + url, {
@@ -35,4 +37,8 @@ async function _get(url) {
 
 function _valueToMoney(value) {
     return value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+}
+
+function _moneyToValue(money) {
+    return parseFloat(money.replace("R$", "").replace(",", "."));
 }

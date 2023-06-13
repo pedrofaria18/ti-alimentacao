@@ -70,7 +70,7 @@ async function _postProduto(nome, valor, quantidade) {
 
         if (response.ok) {
             _badgeSuccess("Produto <b>" + nome + "</b> cadastrado com sucesso! 🎉");
-            _clearPedidoInputs();
+            _clearProdutoInputs();
         } else {
             _badgeError('<b>Falha na Requisição</b> 😖: ' + response.status);
             console.error(response.status);
@@ -81,7 +81,7 @@ async function _postProduto(nome, valor, quantidade) {
     }
 }
 
-function _clearPedidoInputs() {
+function _clearProdutoInputs() {
     const name = document.getElementById("inputName");
     const number = document.getElementById("inputNumber");
     const quantity = document.getElementById("inputQuantity");

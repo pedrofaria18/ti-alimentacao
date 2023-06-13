@@ -174,7 +174,7 @@
               <label class="col-sm-2 col-form-label">Empresa
               </label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Parque">
+                <input id="inputCompany" type="text" class="form-control" placeholder="Parque">
               </div>
             </div>
 
@@ -189,15 +189,15 @@
               <label class="col-sm-2 col-form-label">Total
               </label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" value="R$ 0,00" disabled>
+                <input id="outputTotal" type="text" class="form-control" value="R$ 0,00" disabled>
               </div>
             </div>
 
             <div class="row mb-3">
               <label class="col-sm-2 col-form-label">Pagamento</label>
               <div class="col-sm-10">
-                <select id="selectPayment" class="form-select" onchange="_updateTotal()">
-                  <option selected="">Selecione</option>
+                <select id="inputPayment" class="form-select" onchange="_updateTotal()">
+                  <option selected="Selecione">Selecione</option>
                   <option value="PIX">Pix</option>
                   <option value="BOLETO">Boleto Bancário</option>
                 </select>

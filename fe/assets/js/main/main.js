@@ -6,8 +6,6 @@
  * License: https://bootstrapmade.com/license/
  */
 
-const HOST = 'http://localhost:8080';
-
 (function () {
   "use strict";
 
