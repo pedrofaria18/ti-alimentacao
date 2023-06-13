@@ -28,7 +28,8 @@ public class OrdersController {
 
     Accounting accounting = new Accounting();
 
-    public OrdersController(OrdersRepository ordersRepository, ProductsOrdersRepository productsOrdersRepository, ProductsRepository productsRepository) {
+    public OrdersController(OrdersRepository ordersRepository, ProductsOrdersRepository productsOrdersRepository,
+            ProductsRepository productsRepository) {
         this.ordersRepository = ordersRepository;
         this.productsOrdersRepository = productsOrdersRepository;
         this.productsRepository = productsRepository;
@@ -48,8 +49,7 @@ public class OrdersController {
             productsOrders.forEach(productOrder -> {
                 products.add(new ProductOrderResponseDTO(
                         productOrder.getProduct().getName(),
-                        productOrder.getQuantity()
-                ));
+                        productOrder.getQuantity()));
             });
 
             ordersResponse.add(new OrderResponseDTO(
@@ -58,8 +58,7 @@ public class OrdersController {
                     order.getPaymentMethod(),
                     order.getTotal(),
                     order.getStatus(),
-                    products
-            ));
+                    products));
         });
 
         return ResponseEntity.ok(ordersResponse);
@@ -69,7 +68,7 @@ public class OrdersController {
     public ResponseEntity<Object> show(@PathVariable("id") UUID id) {
         Optional<Order> orderOptional = ordersRepository.findById(id);
 
-        if(!orderOptional.isPresent()) {
+        if (!orderOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found");
         }
 
@@ -82,8 +81,7 @@ public class OrdersController {
         productsOrders.forEach(productOrder -> {
             products.add(new ProductOrderResponseDTO(
                     productOrder.getProduct().getName(),
-                    productOrder.getQuantity()
-            ));
+                    productOrder.getQuantity()));
         });
 
         return ResponseEntity.ok(new OrderResponseDTO(
@@ -92,60 +90,56 @@ public class OrdersController {
                 order.getPaymentMethod(),
                 order.getTotal(),
                 order.getStatus(),
-                products
-        ));
+                products));
     }
 
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody @Valid OrderRequestDTO order) {
 
-        if(order.products() == null || order.products().isEmpty()) {
+        if (order.products() == null || order.products().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Products is required");
         }
 
         Double total = 0.0;
 
-        for(ProductOrderResponseDTO product : order.products()) {
+        for (ProductOrderResponseDTO product : order.products()) {
             Product productSaved = productsRepository.findByName(product.name());
 
-            if(productSaved == null) {
+            if (productSaved == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
             }
 
-            if(product.quantity() > productSaved.getQuantity()) {
+            if (product.quantity() > productSaved.getQuantity()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Product quantity is invalid");
             }
 
             total += productSaved.getPrice() * product.quantity();
         }
 
-        if(!total.equals(order.total())) {
+        if (!total.equals(order.total())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Total is invalid");
         }
 
         Order orderCreated = ordersRepository.save(new Order(
                 order.company(),
                 order.paymentMethod(),
-                order.total()
-        ));
+                order.total()));
 
-        for(ProductOrderResponseDTO product : order.products()) {
+        for (ProductOrderResponseDTO product : order.products()) {
             Product productSaved = productsRepository.findByName(product.name());
 
             productsOrdersRepository.save(new ProductOrder(
                     product.quantity(),
                     productSaved,
-                    orderCreated
-            ));
+                    orderCreated));
 
             productSaved.setQuantity(
-                    productSaved.getQuantity() - product.quantity()
-            );
+                    productSaved.getQuantity() - product.quantity());
 
             productsRepository.save(productSaved);
         }
 
-        //accounting.sendOrder(orderCreated);
+        accounting.sendOrder(orderCreated);
 
         return ResponseEntity.ok(orderCreated);
     }
@@ -154,7 +148,7 @@ public class OrdersController {
     public ResponseEntity<Object> delete(@PathVariable("id") UUID id) {
         Optional<Order> orderOptional = ordersRepository.findById(id);
 
-        if(!orderOptional.isPresent()) {
+        if (!orderOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found");
         }
 
@@ -168,8 +162,7 @@ public class OrdersController {
             Product product = productOrder.getProduct();
 
             product.setQuantity(
-                    product.getQuantity() + productOrder.getQuantity()
-            );
+                    product.getQuantity() + productOrder.getQuantity());
         });
 
         ordersRepository.delete(order);
@@ -181,7 +174,7 @@ public class OrdersController {
     public ResponseEntity<Object> updateStatus(@PathVariable("id") UUID id, @RequestBody @Valid OrderStatus status) {
         Optional<Order> orderOptional = ordersRepository.findById(id);
 
-        if(!orderOptional.isPresent()) {
+        if (!orderOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found");
         }
 
@@ -196,9 +189,9 @@ public class OrdersController {
         }
 
         if (order.getStatus().equals(OrderStatus.AWAITING_PAYMENT)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Do not update the status of an order that is awaiting payment");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Do not update the status of an order that is awaiting payment");
         }
-
 
         if (order.getStatus().equals(status)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Status is the same as the current one");
@@ -208,10 +201,9 @@ public class OrdersController {
                 OrderStatus.ORDER_IN_ROUTE,
                 OrderStatus.ORDER_DELIVERED,
                 OrderStatus.ORDER_SUCCESS,
-                OrderStatus.ORDER_CANCELED
-        );
+                OrderStatus.ORDER_CANCELED);
 
-        if(!orderStatus.contains(status)) {
+        if (!orderStatus.contains(status)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Status is invalid or not allowed");
         }
 
@@ -225,7 +217,7 @@ public class OrdersController {
     public ResponseEntity<Object> receiptPayment(@PathVariable("id") UUID id, @RequestBody @Valid String voucher) {
         Optional<Order> orderOptional = ordersRepository.findById(id);
 
-        if(!orderOptional.isPresent()) {
+        if (!orderOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found");
         }
 
@@ -234,7 +226,6 @@ public class OrdersController {
         if (!order.getStatus().equals(OrderStatus.AWAITING_PAYMENT)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Order is not awaiting payment status");
         }
-
 
         if (voucher == null || voucher.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Voucher is required");
